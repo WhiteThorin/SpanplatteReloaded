@@ -1,0 +1,355 @@
+int EL =4;  //E1
+int ER =6;  //E2
+int ML =5;  //M1
+int MR =7;  //M2
+int Lf1 = 14; // in Fahrtrichtung Rechts
+int Lf2 = 18; // in Fahrtrichtung mitte Rechts
+int Lf3 = 19 ;// in Fahrtrichtung mitte Links
+int Lf4 = 17 ;// in Fahrtrichtung Links
+int IR = A6;
+float var;   
+float distant2;
+int G; 
+long s;
+int M = 0; // Modus: M=0:Linefollowing  M=1:Hinderniss M=2 Keine Linie für max 3 sec. M=3 länger als 3 Sec keine Linie M=4 Rescue Mode M=5 Panik Modus
+int Z = 0 ; 
+int V = 200;
+int R = 100;
+void setup(){
+
+ 
+  pinMode(Lf1, INPUT);
+  pinMode(Lf2, INPUT);
+  pinMode(Lf3, INPUT);
+  pinMode(Lf4, INPUT);
+  pinMode(EL,OUTPUT);
+  pinMode(ER,OUTPUT);
+  pinMode(ML,OUTPUT);
+  pinMode(MR,OUTPUT);
+  pinMode(22,OUTPUT);
+  pinMode(IR,INPUT);
+ Serial.begin(9600); 
+}
+
+
+
+
+void loop(){ 
+var = analogRead(IR) * (0.0048828125); 
+float distant = 12.3 * pow(var,-1.1);
+if(distant >= 35)
+{
+  distant = 35;
+}
+if(distant <= 2)
+{
+  distant = 200;
+}
+Serial.println(distant); 
+delay(100);
+var = 0; 
+//if(distant >= 6) {M = 1; }
+  if(M == 0){
+ 
+
+   if(digitalRead(Lf1) == HIGH && digitalRead(Lf2) == HIGH && digitalRead(Lf3) == LOW && digitalRead(Lf4) == LOW && Z == 0) {
+   Z = 2; 
+   delay(10);
+  }
+  if(digitalRead(Lf1) == HIGH && digitalRead(Lf2) == LOW && digitalRead(Lf3) == LOW && digitalRead(Lf4) == LOW && Z == 0) {
+   Z = 3; 
+   delay(10);
+  }
+  if(digitalRead(Lf1) == LOW && digitalRead(Lf2) == LOW && digitalRead(Lf3) == HIGH && digitalRead(Lf4) == HIGH && Z == 0) {
+   Z = 4; 
+   delay(10);
+  }
+  if(digitalRead(Lf1) == LOW && digitalRead(Lf2) == LOW && digitalRead(Lf3) == LOW && digitalRead(Lf4) == HIGH && Z == 0) {
+   Z = 5; 
+   delay(10);
+  }
+  if(digitalRead(Lf1) == HIGH && digitalRead(Lf2) == HIGH && digitalRead(Lf3) == HIGH && digitalRead(Lf4) == LOW && Z == 0) {
+   Z = 6; 
+   delay(10);
+  }
+  if(digitalRead(Lf1) == LOW && digitalRead(Lf2) == HIGH && digitalRead(Lf3) == HIGH && digitalRead(Lf4) == LOW && Z == 0) {
+   Z = 7; 
+   delay(10);
+  }
+  if(digitalRead(Lf1) == HIGH && digitalRead(Lf2) == HIGH && digitalRead(Lf3) == HIGH && digitalRead(Lf4) == HIGH && Z == 0) {
+   Z = 8; 
+   delay(10); 
+  }
+  if(digitalRead(Lf1) == LOW && digitalRead(Lf2) == LOW && digitalRead(Lf3) == LOW && digitalRead(Lf4) == LOW && Z == 0) {
+   Z = 9; 
+   delay(10);
+   
+  }
+  if(digitalRead(Lf1) == LOW && digitalRead(Lf2) == LOW && digitalRead(Lf3) == HIGH && digitalRead(Lf4) == LOW && Z == 0) {
+   Z = 10; 
+   delay(10);
+  }
+  if(digitalRead(Lf1) == LOW && digitalRead(Lf2) == HIGH && digitalRead(Lf3) == LOW && digitalRead(Lf4) == LOW && Z == 0) {
+   Z = 11; 
+   delay(10);
+  }
+   if(digitalRead(Lf1) == LOW && digitalRead(Lf2) == HIGH && digitalRead(Lf3) == HIGH && digitalRead(Lf4) == HIGH && Z == 0 ) {
+   Z = 12; 
+   delay(10);
+  }
+ 
+  if(digitalRead(Lf1) == HIGH && digitalRead(Lf2) == LOW && digitalRead(Lf3) == LOW && digitalRead(Lf4) == HIGH && Z == 0 ) {
+   Z = 13; 
+   delay(10);
+  }
+ 
+  if(digitalRead(Lf1) == HIGH && digitalRead(Lf2) == LOW && digitalRead(Lf3) == HIGH && digitalRead(Lf4) == LOW && Z == 0 ) {
+   Z = 14; 
+   delay(10);
+  }
+ 
+  if(digitalRead(Lf1) == LOW && digitalRead(Lf2) == HIGH && digitalRead(Lf3) == LOW && digitalRead(Lf4) == HIGH && Z == 0 ) {
+   Z = 15; 
+   delay(10);
+  }
+ 
+  if(digitalRead(Lf1) == HIGH && digitalRead(Lf2) == LOW && digitalRead(Lf3) == HIGH && digitalRead(Lf4) == HIGH && Z == 0 ) {
+   Z = 16; 
+   delay(10);
+  }
+ 
+ if(digitalRead(Lf1) == HIGH && digitalRead(Lf2) == HIGH && digitalRead(Lf3) == LOW  && digitalRead(Lf4) == HIGH && Z == 0 ) {
+   Z = 17; 
+   delay(10);
+  } 
+ 
+ 
+ 
+ 
+ 
+   
+  if(Z == 2){
+    digitalWrite(ML,HIGH); 
+    digitalWrite(MR,LOW);
+    analogWrite(EL,V);
+    analogWrite(ER,R);
+    G = 2;
+    Z = 0;  
+     delay(10);
+ 
+
+   if(Z == 3){
+    digitalWrite(ML,HIGH);
+    digitalWrite(MR,LOW);
+    analogWrite(EL,R);
+    analogWrite(ER,V);
+   G = 3;
+   Z = 0;
+   delay(10);
+  }
+  
+  if (Z == 4){
+    digitalWrite(ML,LOW);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,R);
+    analogWrite(ER,V);
+    G = 4;
+    Z = 0;
+     delay(10);
+}
+  
+
+
+
+  }
+  if(Z == 5){
+    digitalWrite(ML,LOW);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,R);
+    analogWrite(ER,V);
+    G = 5;
+    Z = 0;
+      delay(10);
+    }
+  if(Z == 6){
+    digitalWrite(ML,HIGH);
+    digitalWrite(MR,LOW);
+    analogWrite(EL,V);
+    analogWrite(ER,R);
+    G = 6;
+    Z = 0;
+      delay(10);
+  }
+   if(Z == 7){
+    digitalWrite(ML,HIGH);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,V);
+    analogWrite(ER,V);
+   G = 7;
+   Z = 0;
+      delay(10);
+  }
+
+ 
+   if(Z == 8 && G == 6){
+  
+    digitalWrite(ML,HIGH);
+    digitalWrite(MR,LOW);
+    analogWrite(EL,V);
+    analogWrite(ER,V);
+      Z = 0;
+    delay(10);       
+      }
+       if(Z == 8 && G == 12){
+  
+    digitalWrite(ML,LOW);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,V);
+    analogWrite(ER,V);
+      Z = 0;
+    delay(10);       
+      }
+
+  if(Z == 9 && G == 6){
+    digitalWrite(ML,HIGH);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,V);
+    analogWrite(ER,0);
+  Z = 0; 
+  delay(10);
+  }
+    if(Z == 9 && G == 12){
+    digitalWrite(ML,HIGH);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,0);
+    analogWrite(ER,V);
+  Z = 0; 
+  delay(10);
+  }
+     if(Z == 9 && G != 12 && G != 6){
+    digitalWrite(ML,HIGH);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,V);
+    analogWrite(ER,V);
+  Z = 0; 
+  delay(10);
+  }
+  
+ 
+   if(Z == 10){
+    digitalWrite(ML,LOW);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,R);
+    analogWrite(ER,V);
+   G = 10 ;
+   Z = 0;
+   delay(10);
+   }
+      if(Z == 11){
+    digitalWrite(ML,HIGH);
+    digitalWrite(MR,LOW);
+    analogWrite(EL,V);
+    analogWrite(ER,R);
+   G = 11;
+   Z = 0;
+     delay(10);
+  }
+    if(Z == 12){
+    digitalWrite(ML,LOW);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,0);
+    analogWrite(ER,V);
+    G = 12;
+    Z = 0; 
+     delay(10);
+  }
+   
+    if(Z == 13){
+    digitalWrite(ML,HIGH);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,V);
+    analogWrite(ER,V);
+  G = 13;  
+ Z = 0;
+ delay(10);
+  } 
+  
+    if(Z == 14){
+    digitalWrite(ML,LOW);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,R);
+    analogWrite(ER,V);
+   G = 14;
+   Z = 0;
+    delay(10);
+  }
+  
+    if(Z == 15){
+    digitalWrite(ML,HIGH);
+    digitalWrite(MR,LOW);
+    analogWrite(EL,V);
+    analogWrite(ER,R);
+   G = 15;
+   Z = 0;
+    delay(10);
+  }
+   
+      if(Z == 16){
+    digitalWrite(ML,LOW);
+    digitalWrite(MR,HIGH);
+    analogWrite(EL,R);
+    analogWrite(ER,V);
+   G = 16;
+   Z = 0;
+   delay(10);
+  } 
+  
+   if(Z == 17){
+    digitalWrite(ML,HIGH);
+    digitalWrite(MR,LOW);
+    analogWrite(EL,V);
+    analogWrite(ER,R);
+   G = 17;
+   Z = 0;
+   delay(10);
+  }
+  
+
+
+  
+  
+ } 
+
+               if(M = 1) {
+                digitalWrite(ML,LOW);
+                digitalWrite(MR,LOW);
+                analogWrite(EL,V);
+                analogWrite(ER,V);
+                delay(1000);
+                if(distant2 >= 30) {
+                digitalWrite(ML,HIGH);
+                digitalWrite(MR,LOW);
+                analogWrite(EL,V);
+                analogWrite(ER,0);
+                delay(500);
+                digitalWrite(ML,LOW);
+                digitalWrite(MR,HIGH);
+                analogWrite(EL,0);
+                analogWrite(ER,V);
+                }
+               
+               } 
+ 
+ }
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
