@@ -6,13 +6,13 @@ int Lf1 = 14; // in Fahrtrichtung Rechts
 int Lf2 = 18; // in Fahrtrichtung mitte Rechts
 int Lf3 = 19 ;// in Fahrtrichtung mitte Links
 int Lf4 = 17 ;// in Fahrtrichtung Links
-int IR = A6;
-float var;   
-float distant2;
+int IR1 = A6;
+float var1;   
+float distant1;
 int G; 
-long s;
+long s;  // Wo für
 int M = 0; // Modus: M=0:Linefollowing  M=1:Hinderniss M=2 Keine Linie für max 3 sec. M=3 länger als 3 Sec keine Linie M=4 Rescue Mode M=5 Panik Modus
-int Z = 0 ; 
+int Z = 0; 
 int V = 200;
 int R = 100;
 void setup(){
@@ -26,8 +26,8 @@ void setup(){
   pinMode(ER,OUTPUT);
   pinMode(ML,OUTPUT);
   pinMode(MR,OUTPUT);
-  pinMode(22,OUTPUT);
-  pinMode(IR,INPUT);
+  pinMode(22,OUTPUT); //Welcher Sensor
+  pinMode(IR1,INPUT);
  Serial.begin(9600); 
 }
 
@@ -35,20 +35,20 @@ void setup(){
 
 
 void loop(){ 
-var = analogRead(IR) * (0.0048828125); 
-float distant = 12.3 * pow(var,-1.1);
-if(distant >= 35)
-{
-  distant = 35;
-}
-if(distant <= 2)
-{
-  distant = 200;
-}
-Serial.println(distant); 
+var1 = analogRead(IR1) * (0.0048828125); 
+float distant1 = 12.3 * pow(var,-1.1);
+
+Serial.println(distant1); 
 delay(100);
-var = 0; 
-//if(distant >= 6) {M = 1; }
+var1 = 0; 
+unsigned long currentMillis = millis();
+
+//if(distant1 <= 10 && PreMillis - currentMillis >= 1) {
+M = 1;
+  preMillis = currentMillis;
+}
+ 
+ 
   if(M == 0){
  
 
