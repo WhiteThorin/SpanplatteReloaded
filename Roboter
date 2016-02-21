@@ -336,7 +336,10 @@ var = 0;
                 digitalWrite(MR,HIGH);
                 analogWrite(EL,0);
                 analogWrite(ER,V);
+                M = 0;
+                
                 }
+                
                
                } 
  
